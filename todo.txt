@@ -1,0 +1,8 @@
+cidades adicionar coluna urgente - sim ou nao - cor vermelho no mapa - OK
+cidades adicionar coluna coleta - sim ou nao - cor laranja no mapa - OK
+lista de cidades ordem alfabetica na lsitagem de cidades - OK
+cadsatrar todas as cidades estado de SP - OK
+no mapa, quando inserir um motorista, o proximo marker ja mostrar o ultimo motorista cadastrado - OK
+ter uma opcao para limpar o mapa do dia
+hora que cadastrar a cidade com motorista, ela nao deve aparecer mais no mapa - OK
+ter opcao de cancelar a viagem do motorista, e assim as cidades retornar ao mapa - OK
