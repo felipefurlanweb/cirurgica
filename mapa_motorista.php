@@ -45,6 +45,34 @@ if ($motorista_id > 0) {
         $cidades = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
     }
+
+    $rioClaro = $conn->query("
+      SELECT
+          c.id AS cidade_id,
+          c.nome,
+          e.uf,
+          c.latitude,
+          c.longitude 
+      FROM cidades c
+      JOIN estado e ON e.id = c.uf
+      WHERE c.nome = 'Rio Claro' AND e.uf = 'SP'
+      LIMIT 1
+    ")->fetch_assoc();
+
+    if ($rioClaro) {
+      // só adiciona se ainda não existir no array
+      $jaExiste = false;
+      foreach ($cidades as $c) {
+        if ($c['nome'] === $rioClaro['nome'] && $c['uf'] === $rioClaro['uf']) {
+          $jaExiste = true;
+          break;
+        }
+      }
+      if (!$jaExiste) {
+        $cidades[] = $rioClaro;
+      }
+    }
+
 }
 ?>
 
@@ -86,6 +114,7 @@ if ($motorista_id > 0) {
               <li class="list-group-item">Nenhuma cidade atribuída para este motorista.</li>
             <?php else: ?>
               <?php foreach ($cidades as $cidade): ?>
+                <?php if ($cidade["nome"] == "Rio Claro" && $cidade["uf"] == "SP") continue; // Ignora Rio Claro SP ?>
                 <li class="list-group-item d-flex justify-content-between align-items-center"
                     data-cidade-id="<?= (int)$cidade['cidade_id'] ?>">
                   <span><?= htmlspecialchars($cidade['nome']) ?> (<?= htmlspecialchars($cidade['uf']) ?>)</span>
@@ -110,6 +139,11 @@ if ($motorista_id > 0) {
 
     const motoristaId = <?= (int)$motorista_id ?>;
     const cidades = <?= json_encode($cidades, JSON_UNESCAPED_UNICODE) ?>;
+
+    const iconGreen = L.icon({ iconUrl: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',   iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32] });
+    const iconBlue = L.icon({ iconUrl: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',   iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32] });
+    const iconRed  = L.icon({ iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',    iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32] });
+    const iconOrg  = L.icon({ iconUrl: 'https://maps.google.com/mapfiles/ms/icons/orange-dot.png', iconSize:[32,32], iconAnchor:[16,32], popupAnchor:[0,-32] });
 
     const mapa = L.map('map').setView([-15, -55], 4);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -140,8 +174,15 @@ if ($motorista_id > 0) {
 
         if (lat != null && lon != null) {
           coords.push([lat, lon]);
-          const mk = L.marker([lat, lon]).addTo(mapa).bindPopup(`${c.nome} (${c.uf})`);
-          markersByCidade[c.cidade_id] = mk;
+
+          if(c.nome == "Rio Claro" && c.uf == "SP") {
+            const mk = L.marker([lat, lon], { icon: iconGreen }).addTo(mapa).bindPopup(`${c.nome} (${c.uf})`);
+            markersByCidade[c.cidade_id] = mk;
+          } else {
+            // Use iconBlue for others
+            const mk = L.marker([lat, lon], { icon: iconBlue }).addTo(mapa).bindPopup(`${c.nome} (${c.uf})`);
+            markersByCidade[c.cidade_id] = mk;
+          }
         }
       }
 
