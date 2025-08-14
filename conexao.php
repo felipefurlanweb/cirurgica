@@ -1,5 +1,5 @@
 <?php
-$conn = new mysqli("localhost", "usuario", "senha", "guerra");
+$conn = new mysqli("localhost", "root", "", "cirurgica");
 if ($conn->connect_error) die("Erro: " . $conn->connect_error);
 // Garanta UTF-8 em TUDO na conexão
 $conn->set_charset('utf8mb4');

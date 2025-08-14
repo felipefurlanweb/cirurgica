@@ -231,7 +231,8 @@ if ($rioClaro) {
   // ====== ADD CITY FROM SELECT2 ======
   $('#selectCidade').on('select2:select', async function (e) {
     const dataSel = e.params.data; // {id:"Nome,UF", nome, uf}
-    const chave = dataSel.id;
+    // const chave = dataSel.id;
+    const chave = `${dataSel.nome},${dataSel.uf}`;
     if (!chave || markerCidade[chave]) { $('#selectCidade').val(null).trigger('change'); return; }
 
     spinner.style.display = 'inline-block';
@@ -260,7 +261,15 @@ if ($rioClaro) {
         mapa.setView([lat, lon], DEFAULT_ZOOM_SINGLE);
 
         // Inicia info sem histórico
-        infoCidade[chave] = { motorista_id: null, motorista_nome: null, urgente: 'nao', coleta: 'nao' };
+        // infoCidade[chave] = { motorista_id: null, motorista_nome: null, urgente: 'nao', coleta: 'nao' };
+        infoCidade[chave] = {
+          motorista_id: null,
+          motorista_nome: null,
+          urgente: 'nao',
+          coleta: 'nao',
+          nome: dataSel.nome,
+          uf: dataSel.uf
+        };
 
         // Lista lateral
         const li = document.createElement('li');
@@ -353,7 +362,8 @@ if ($rioClaro) {
     const info = infoCidade[chave] || { motorista_id: null, urgente: 'nao', coleta: 'nao' };
     const preselectId = info.motorista_id || (ultimoMotoristaId ? String(ultimoMotoristaId) : '');
 
-    const safeId = chave.replace(/[^a-z0-9_-]/gi, '_');
+    const safeId = String(chave).replace(/[^a-z0-9_-]/gi, '_');
+    // const safeId = chave.replace(/[^a-z0-9_-]/gi, '_');
     // const safeId = chave;
 
     let opts = '<option value="">...</option>';

@@ -50,7 +50,7 @@ while ($row = $res3->fetch_assoc()) {
 
 
 <div class="row g-4 mb-4">
-  <div class="col-md-4">
+  <div class="col-md-6">
     <div class="card border-primary shadow h-100">
       <div class="card-body">
         <h5 class="card-title">Motoristas</h5>
@@ -61,24 +61,12 @@ while ($row = $res3->fetch_assoc()) {
     </div>
   </div>
 
-  <div class="col-md-4">
-    <div class="card border-success shadow h-100">
-      <div class="card-body">
-        <h5 class="card-title">Cidades</h5>
-        <p class="card-text fs-4"><?= $total_cidades ?> cadastradas</p>
-        <a href="list_cidades.php" class="btn btn-outline-success w-100">Ver todas</a>
-        <a href="form_cidade.php" class="btn btn-success mt-2 w-100">Nova Cidade</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-4">
+  <div class="col-md-6">
     <div class="card border-dark shadow h-100">
       <div class="card-body">
         <h5 class="card-title">Viagens</h5>
         <p class="card-text fs-4"><?= $total_viagens ?> registradas</p>
         <a href="list_viagens.php" class="btn btn-outline-dark w-100">Ver todas</a>
-        <a href="form_viagem.php" class="btn btn-dark mt-2 w-100">Nova Viagem</a>
       </div>
     </div>
   </div>

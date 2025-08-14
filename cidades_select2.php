@@ -28,10 +28,9 @@ $stmt = $conn->prepare("
     ) ult ON ult.cidade_id = c.id
     LEFT JOIN viagens v ON v.id = ult.max_id
     WHERE c.nome LIKE CONCAT('%', ?, '%') 
-    AND c.nome <> 'Rio Claro' AND e.uf <> 'SP' 
+    
       AND (v.motorista_id IS NULL OR v.motorista_id = 0)
     ORDER BY c.nome ASC
-    LIMIT 20
 ");
 
 $stmt->bind_param("s", $q);
@@ -42,7 +41,12 @@ $resultado = [];
 while ($row = $res->fetch_assoc()) {
     $jaNoMapa = in_array((int)$row['id'], $cidadesMapa);
 
-    if ($jaNoMapa) {
+    if($row['nome'] == "Rio Claro" && $row['uf'] == "SP") {
+        // Excluir Rio Claro do resultado
+        continue;
+    }
+
+    if ($jaNoMapa) {      
         $resultado[] = [
             'id' => null,
             'text' => '⚠ ' . $row['nome'] . ' (' . $row['uf'] . ') — já está cadastrada no mapa',
